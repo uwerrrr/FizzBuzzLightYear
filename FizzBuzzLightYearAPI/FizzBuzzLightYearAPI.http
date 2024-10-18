@@ -1,0 +1,6 @@
+@FizzBuzzLightYearAPI_HostAddress = http://localhost:5012
+
+GET {{FizzBuzzLightYearAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
