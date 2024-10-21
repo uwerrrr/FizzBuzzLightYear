@@ -1,4 +1,5 @@
 using FizzBuzzLightYearAPI.Context;
+using FizzBuzzLightYearAPI.Repositories;
 using FizzBuzzLightYearAPI.Services;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,7 +20,10 @@ builder.Services.AddDbContext<APIDbContext>(options =>
 });
 
 builder.Services.AddScoped<GameService>();
+builder.Services.AddScoped<GameRepository>();
+
 builder.Services.AddScoped<RuleService>();
+builder.Services.AddScoped<RuleRepository>();
 // builder.Services.AddScoped<GameSessionService>();
 // builder.Services.AddScoped<QuestionService>();
 
