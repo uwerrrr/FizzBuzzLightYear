@@ -25,5 +25,5 @@ public class GameSession
     public Game Game { get; set; }
 
     // Relationship to Questions
-    public ICollection<Question> Questions { get; set; } = new List<Question>();
+    public List<Question> Questions { get; set; } = new List<Question>();
 }

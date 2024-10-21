@@ -18,5 +18,5 @@ public class Game
     public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
 
     // Relationship to Rules
-    public ICollection<Rule> Rules { get; set; } = new List<Rule>();
+    public List<Rule> Rules { get; set; } = new List<Rule>();
 }
