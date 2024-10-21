@@ -1,4 +1,5 @@
 using FizzBuzzLightYearAPI.Context;
+using FizzBuzzLightYearAPI.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,6 +18,10 @@ builder.Services.AddDbContext<APIDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnectionString"));
 });
 
+builder.Services.AddScoped<GameService>();
+builder.Services.AddScoped<RuleService>();
+// builder.Services.AddScoped<GameSessionService>();
+// builder.Services.AddScoped<QuestionService>();
 
 var app = builder.Build();
 
