@@ -17,6 +17,6 @@ public class Game
     [Required]
     public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
 
-    // Relationship to Rules
+    // Navigation property
     public List<Rule> Rules { get; set; } = new List<Rule>();
 }

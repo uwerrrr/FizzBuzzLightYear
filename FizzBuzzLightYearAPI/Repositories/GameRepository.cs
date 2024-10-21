@@ -20,16 +20,16 @@ public class GameRepository
             .ToListAsync();
     }
     
-    public async Task<Game> GetAGameWithRulesByIdAsync(Guid GameId)
+    public async Task<Game> GetAGameWithRulesByIdAsync(Guid gameId)
     {
         return await _context.Games
             .Include(q => q.Rules)
-            .FirstOrDefaultAsync(g => g.GameId == GameId);
+            .FirstOrDefaultAsync(g => g.GameId == gameId);
     }
     
-    public async Task<bool> IsGameExistsAsync(Guid GameId)
+    public async Task<bool> IsGameExistsAsync(Guid gameId)
     {
-        return await _context.Games.AnyAsync(q => q.GameId == GameId);
+        return await _context.Games.AnyAsync(q => q.GameId == gameId);
     }
     
     public async Task AddGameAsync(Game Game)

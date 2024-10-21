@@ -13,10 +13,10 @@ public class RuleRepository
         _context = context;
     }
     
-    public async Task<List<Rule>> GetRulesByGameIdAsync(Guid GameId)
+    public async Task<List<Rule>> GetRulesByGameIdAsync(Guid gameId)
     {
         return await _context.Rules
-            .Where(a => a.GameId == GameId)
+            .Where(a => a.GameId == gameId)
             .ToListAsync();
     }
     
@@ -34,11 +34,11 @@ public class RuleRepository
         await _context.SaveChangesAsync();
     }
     
-    public async Task RemoveAllRulesByGameIdAsync(Guid GameId)
+    public async Task RemoveAllRulesByGameIdAsync(Guid gameId)
     {
         _context.Rules
             .RemoveRange(_context.Rules
-                .Where(a => a.GameId == GameId));
+                .Where(a => a.GameId == gameId));
         await _context.SaveChangesAsync();
     }
     

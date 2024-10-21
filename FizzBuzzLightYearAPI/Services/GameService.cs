@@ -21,13 +21,13 @@ public class GameService
     }
     
     // get a game with its rules by id
-    public async Task<Game> GetAGameWithRulesByIdAsync(Guid GameId)
+    public async Task<Game> GetAGameWithRulesByIdAsync(Guid gameId)
     {
-        var existingGame = await GetAGameWithRulesByIdAsync(GameId);
+        var existingGame = await GetAGameWithRulesByIdAsync(gameId);
         
         if (existingGame == null)
         {
-            throw new Exception($"Game with id {GameId} does not exist");
+            throw new Exception($"Game with id {gameId} does not exist");
         }
 
         return existingGame;
@@ -77,19 +77,19 @@ public class GameService
     }
 
     // remove a game with its rules
-    public async Task RemoveGameWithRulesByIdAsync(Guid GameId)
+    public async Task RemoveGameWithRulesByIdAsync(Guid gameId)
     {
-        var existingGame = await GetAGameWithRulesByIdAsync(GameId);
+        var existingGame = await GetAGameWithRulesByIdAsync(gameId);
         
         // if (existingGame == null)
         // {
-        //     throw new Exception($"Game with id {GameId} does not exist");
+        //     throw new Exception($"Game with id {gameId} does not exist");
         // }
 
         if (existingGame != null)
         {
             // Remove rules using the RuleService
-            await _ruleService.RemoveRulesByGameIdAsync(GameId);
+            await _ruleService.RemoveRulesByGameIdAsync(gameId);
 
             // Remove the game
             await _gameRepo.RemoveGameAsync(existingGame);
