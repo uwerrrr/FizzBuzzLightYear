@@ -12,11 +12,15 @@ public class Question
     public Guid SessionId { get; set; }
 
     [Required]
-    public int Number { get; set; } // Random number generated
+    public int Number { get; set; }
     
-    public string PlayerAnswer { get; set; } = string.Empty; // Player's answer
+    // convert all answers to string for evaluation
+    public string ExpectedAnswer { get; set; } = string.Empty;
+    public string? PlayerAnswer { get; set; }
     
-    public bool IsCorrect { get; set; } // True if the player's answer is correct
+    public bool? IsCorrect { get; set; }
+    
+    public DateTime GeneratedAt { get; set; } = DateTime.UtcNow;
 
     // Navigation property
     public GameSession GameSession { get; set; }

@@ -15,13 +15,16 @@ public class GameSession
     public string Player { get; set; } = string.Empty;
     
     [Required]
-    public int Duration { get; set; }
-
+    public int DurationSeconds { get; set; }
+    
     [Required]
     public DateTime StartTime { get; set; } = DateTime.UtcNow;
 
     public DateTime EndTime { get; set; }
 
+    public bool IsActive { get; set; }
+    public int CorrectAnswerNum { get; set; }
+    public int IncorrectAnswerNum { get; set; }
     public int Score { get; set; }
 
     // Navigation property

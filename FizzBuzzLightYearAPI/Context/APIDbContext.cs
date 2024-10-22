@@ -97,48 +97,52 @@ public class APIDbContext: DbContext
                 SessionId = seedGameSessionId,
                 GameId = fizzBuzzLooGameId,
                 Player = "TestPlayer",
+                DurationSeconds = 60,
                 StartTime = DateTime.UtcNow,
-                EndTime = DateTime.UtcNow.AddMinutes(1),
-                Score = 0
+                EndTime = DateTime.UtcNow.AddSeconds(60),
+                Score = 0,
+                IsActive = false,
+                CorrectAnswerNum = 3,
+                IncorrectAnswerNum = 2
             }
         );
         
         
-         // Seed initial data for Questions
-         modelBuilder.Entity<Question>().HasData(
-             new Question
-             {
-                 QuestionId = Guid.NewGuid(),
-                 SessionId = seedGameSessionId, 
-                 Number = 3,
-                 PlayerAnswer = "Fizz", 
-                 IsCorrect = true
-             },
-             new Question
-             {
-                 QuestionId = Guid.NewGuid(),
-                 SessionId = seedGameSessionId,
-                 Number = 5,
-                 PlayerAnswer = "Buzz", 
-                 IsCorrect = true
-             },
-             new Question
-             {
-                 QuestionId = Guid.NewGuid(),
-                 SessionId = seedGameSessionId,
-                 Number = 8,
-                 PlayerAnswer = "Fizz", 
-                 IsCorrect = false
-             },
-             new Question
-             {
-                 QuestionId = Guid.NewGuid(),
-                 SessionId = seedGameSessionId,
-                 Number = 15,
-                 PlayerAnswer = "FizzBuzz", 
-                 IsCorrect = true
-             }
-        );
+        //  // Seed initial data for Questions
+        //  modelBuilder.Entity<Question>().HasData(
+        //      new Question
+        //      {
+        //          QuestionId = Guid.NewGuid(),
+        //          SessionId = seedGameSessionId, 
+        //          Number = 3,
+        //          PlayerAnswer = "Fizz", 
+        //          IsCorrect = true
+        //      },
+        //      new Question
+        //      {
+        //          QuestionId = Guid.NewGuid(),
+        //          SessionId = seedGameSessionId,
+        //          Number = 5,
+        //          PlayerAnswer = "Buzz", 
+        //          IsCorrect = true
+        //      },
+        //      new Question
+        //      {
+        //          QuestionId = Guid.NewGuid(),
+        //          SessionId = seedGameSessionId,
+        //          Number = 8,
+        //          PlayerAnswer = "Fizz", 
+        //          IsCorrect = false
+        //      },
+        //      new Question
+        //      {
+        //          QuestionId = Guid.NewGuid(),
+        //          SessionId = seedGameSessionId,
+        //          Number = 15,
+        //          PlayerAnswer = "FizzBuzz", 
+        //          IsCorrect = true
+        //      }
+        // );
 
     }
 
