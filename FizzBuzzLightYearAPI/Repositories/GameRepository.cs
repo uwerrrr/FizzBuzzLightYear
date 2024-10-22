@@ -32,21 +32,21 @@ public class GameRepository
         return await _context.Games.AnyAsync(q => q.GameId == gameId);
     }
     
-    public async Task AddGameAsync(Game Game)
+    public async Task AddGameAsync(Game game) // Game includes list of rules
     {
-        _context.Games.Add(Game);
+        _context.Games.Add(game);
         await _context.SaveChangesAsync();
     }
     
-    public async Task UpdateGameAsync(Game Game)
+    public async Task UpdateGameAsync(Game game) // Game includes list of rules
     {
-        _context.Update(Game);
+        _context.Update(game);
         await _context.SaveChangesAsync();
     }
     
-    public async Task RemoveGameAsync(Game Game)
+    public async Task RemoveGameAsync(Game game)
     {
-        _context.Games.Remove(Game);
+        _context.Games.Remove(game);
         await _context.SaveChangesAsync();
     }
     

@@ -1,4 +1,5 @@
 using FizzBuzzLightYearAPI.DTOs;
+using FizzBuzzLightYearAPI.Mappers;
 using FizzBuzzLightYearAPI.Models;
 using FizzBuzzLightYearAPI.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -21,7 +22,18 @@ public class GameController : ControllerBase
     public async Task<IActionResult> GetAllGamesWithRules()
     {
         var games = await _gameService.GetAllGamesWithRulesAsync();
-        return Ok(games);
+        
+        // Check if the list is null or empty
+        if (games == null || !games.Any())
+        {
+            return NotFound("No games found.");
+        }
+        
+        // Map each game to GameDTO
+        var gameDTOs = games.Select(game => game.MapToGameDTO()).ToList();
+
+       
+        return Ok(gameDTOs);
     }
 
     // GET: api/Game/{gameId}
@@ -31,25 +43,30 @@ public class GameController : ControllerBase
         try
         {
             var game = await _gameService.GetAGameWithRulesByIdAsync(gameId);
-            return Ok(game);
+            if (game == null)
+            {
+                return NotFound($"Game with ID {gameId} not found.");
+            }
+            var gameDTO = game.MapToGameDTO();
+            return Ok(gameDTO);
         }
         catch (Exception ex)
         {
-            return NotFound(ex.Message);
+            return StatusCode(500, $"Internal server error: {ex.Message}");
         }
     }
 
     // POST: api/Game
     [HttpPost]
-    public async Task<IActionResult> AddGameWithRules([FromBody] GameWithRulesCreateDto gameWithRulesCreateDto)
+    public async Task<IActionResult> AddGameWithRules([FromBody] GameCreateDTO newGame)
     {
         try
         {
-            var game = gameWithRulesCreateDto.Game;
-            var rules = gameWithRulesCreateDto.Rules;
+            var createdGame = await _gameService.AddGameWithRulesAsync(newGame);
             
-            await _gameService.AddGameWithRulesAsync(game, rules);
-            return CreatedAtAction(nameof(GetAGameWithRulesById), new { id = game.GameId }, game);
+            // Returns a 201 Created response with the location of the newly created game resource 
+            // and a DTO representation of the game, using the GameId to build the URL for retrieval.
+            return CreatedAtAction(nameof(GetAGameWithRulesById), new { gameId = createdGame.GameId }, createdGame.MapToGameDTO()); 
         }
         catch (Exception ex)
         {
@@ -59,7 +76,7 @@ public class GameController : ControllerBase
 
     // PUT: api/Game/{gameId}
     [HttpPut("{gameId}")]
-    public async Task<IActionResult> UpdateGameWithRules([FromBody] Game gameToUpdate)
+    public async Task<IActionResult> UpdateGameWithRules([FromBody] GameUpdateDTO gameToUpdate)
     {
         try
         {
