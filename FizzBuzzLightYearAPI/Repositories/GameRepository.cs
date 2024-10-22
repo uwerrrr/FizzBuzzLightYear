@@ -27,10 +27,17 @@ public class GameRepository
             .FirstOrDefaultAsync(g => g.GameId == gameId);
     }
     
+    public async Task<bool> IsNameUniqueAsync(string name)
+    {
+        return !await _context.Games
+            .AnyAsync(g => g.Name.ToLower() == name.ToLower());
+    }
+    
     public async Task<bool> IsGameExistsAsync(Guid gameId)
     {
         return await _context.Games.AnyAsync(q => q.GameId == gameId);
     }
+    
     
     public async Task AddGameAsync(Game game) // Game includes list of rules
     {

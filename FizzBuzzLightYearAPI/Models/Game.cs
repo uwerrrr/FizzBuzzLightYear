@@ -19,4 +19,7 @@ public class Game
 
     // Navigation property
     public List<Rule> Rules { get; set; } = new List<Rule>();
+    
+    // // Navigation property
+    // public List<GameSession>? GameSessions { get; set; } = new List<GameSession>();
 }

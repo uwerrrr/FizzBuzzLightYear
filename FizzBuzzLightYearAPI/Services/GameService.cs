@@ -15,6 +15,14 @@ public class GameService
         _ruleService = rulesService;
     }
     
+    // Check if game unique
+    
+    public async Task<bool> IsNameUniqueAsync(string name)
+    {
+        return await _gameRepo.IsNameUniqueAsync(name);
+    }
+    
+    
      // get all quesitons with rules
     public async Task<List<Game>> GetAllGamesWithRulesAsync()
     {
@@ -44,6 +52,11 @@ public class GameService
     
     public async Task<Game> AddGameWithRulesAsync(GameCreateDTO newGameDTO)
     {
+        // Validate if game name is unique
+        if (!await _gameRepo.IsNameUniqueAsync(newGameDTO.Name))
+        {
+            throw new ArgumentException($"A game with the name '{newGameDTO.Name}' already exists");
+        }
         
         // Validate the number of rules needs to be 3 rules during creation
         if (newGameDTO.Rules.Count != 3)
@@ -54,14 +67,14 @@ public class GameService
         var newGame = new Game
         {
             GameId = Guid.NewGuid(),
-            Name = newGameDTO.Name,
-            Author = newGameDTO.Author,
+            Name = newGameDTO.Name.Trim(),
+            Author = newGameDTO.Author.Trim(),
             CreatedDate = DateTime.UtcNow,
             Rules = newGameDTO.Rules.Select(r => new Rule
             {
                 RuleId = Guid.NewGuid(),
                 DivisibleBy = r.DivisibleBy,
-                ReplaceWith = r.ReplaceWith
+                ReplaceWith = r.ReplaceWith.Trim()
             }).ToList()
         };
         
@@ -81,6 +94,12 @@ public class GameService
     // update a game with its rules
     public async Task UpdateGameWithRulesAsync(GameUpdateDTO gameToUpdate)
     {
+        // Validate if game name is unique
+        if (!await _gameRepo.IsNameUniqueAsync(gameToUpdate.Name))
+        {
+            throw new ArgumentException($"A game with the name '{gameToUpdate.Name}' already exists");
+        }
+        
         var existingGame = await GetAGameWithRulesByIdAsync(gameToUpdate.GameId);
         
         // Update the game attributes

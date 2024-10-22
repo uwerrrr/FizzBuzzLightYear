@@ -13,6 +13,9 @@ public class GameSession
 
     [Required]
     public string Player { get; set; } = string.Empty;
+    
+    [Required]
+    public int Duration { get; set; }
 
     [Required]
     public DateTime StartTime { get; set; } = DateTime.UtcNow;
