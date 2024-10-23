@@ -28,6 +28,20 @@ builder.Services.AddScoped<RuleRepository>();
 builder.Services.AddScoped<GameSessionService>();
 // builder.Services.AddScoped<QuestionService>();
 
+
+
+// CORS policy setup - for local frontend access
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowSpecificOrigin",
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:3000","http://localhost:3001","http://localhost:3002") // Specify the client origin
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+        });
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -38,7 +52,8 @@ if (app.Environment.IsDevelopment())
 }
 
 
-
+// Enable CORS
+app.UseCors("AllowSpecificOrigin");
 
 app.UseHttpsRedirection();
 
