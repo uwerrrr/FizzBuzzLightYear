@@ -14,18 +14,17 @@ public class GameSessionService
     private readonly APIDbContext _context;
     private readonly GameService _gameService;
     
-    private readonly Random _random;
+    private readonly Random _random = new Random();
     private const int MIN_NUMBER = 1;
     private const int MAX_NUMBER = 1000;
-    private const int POINTS_PER_CORRECT_ANSWER = 1;
-    
 
     public GameSessionService(APIDbContext context, GameService gameService)
     {
         _context = context;
         _gameService = gameService;
     }
-    
+
+
     public async Task<GameSessionResponseDTO> StartNewSessionAsync(StartGameSessionDTO request)
     {
         var game = await _gameService.GetAGameWithRulesByIdAsync(request.GameId);
@@ -36,7 +35,8 @@ public class GameSessionService
             StartTime = DateTime.UtcNow,
             DurationSeconds = request.DurationSeconds,
             EndTime = DateTime.UtcNow.AddSeconds(request.DurationSeconds),
-            IsActive = true
+            IsActive = true,
+            Player = request.PlayerName
         };
 
         _context.GameSessions.Add(newGameSession);
@@ -45,7 +45,7 @@ public class GameSessionService
         // Generate first question
         var firstQuestion = await GenerateQuestionAsync(newGameSession);
 
-        // will do mapper here
+        // TODO: mapper here
         return new GameSessionResponseDTO
         {
             SessionId = newGameSession.SessionId,
@@ -66,28 +66,107 @@ public class GameSessionService
     }
     
     
-    // public async Task<GameSessionStatsDTO> GetSessionStatsAsync(Guid sessionId)
-    // {
-    //     var session = await _context.GameSessions
-    //         .FirstOrDefaultAsync(s => s.SessionId == sessionId);
-    //
-    //     if (session == null)
-    //         throw new NotFoundException("Session not found");
-    //
-    //     return new GameSessionStatsDto
-    //     {
-    //         CorrectAnswers = session.CorrectAnswers,
-    //         IncorrectAnswers = session.IncorrectAnswers
-    //     };
-    // }
-    //
+    public async Task<AnswerResponseDTO> ProcessAnswerAsync(SubmitAnswerDTO submittedAnswer)
+    {
+        // get session data from db
+        var session = await _context.GameSessions
+            .Include(s => s.Game)
+            .ThenInclude(g => g.Rules)
+            .Include(s => s.Questions)
+            .FirstOrDefaultAsync(s => s.SessionId == submittedAnswer.SessionId);
+
+        if (session == null)
+            throw new Exception("Session not found");
+
+        var question = session.Questions.FirstOrDefault(q => q.QuestionId == submittedAnswer.QuestionId);
+
+
+        if (question == null)
+            throw new Exception("Question not found");
+        
+
+        // Update question with user's submittedAnswer
+        question.PlayerAnswer = submittedAnswer.PlayerAnswer;
+        
+        // check if player answer correct
+        question.IsCorrect = string.Equals(
+            submittedAnswer.PlayerAnswer.Trim(), 
+            question.ExpectedAnswer.Trim(), 
+            StringComparison.OrdinalIgnoreCase);
+
+        if (question.IsCorrect == true)
+            session.CorrectAnswerNum++;
+        else
+            session.IncorrectAnswerNum++;
+
+        // Generate next question if game is still active
+        Question? nextQuestion = null;
+        if (DateTime.UtcNow < session.EndTime)
+        {
+            nextQuestion = await GenerateQuestionAsync(session);
+        }
+        else
+        {
+            session.IsActive = false;
+        }
+
+        // if (!session.IsActive || DateTime.UtcNow > session.EndTime)
+        // {
+        //     session.IsActive = false;
+        //     await _context.SaveChangesAsync();
+        //     return new AnswerResponseDTO
+        //     {
+        //         GameEnded = true
+        //     };
+        // }
+        
+        await _context.SaveChangesAsync();
+
+        return new AnswerResponseDTO
+        {
+            IsCorrect = question.IsCorrect ?? false,
+            CorrectAnswer = question.ExpectedAnswer,
+            PlayerAnswer = submittedAnswer.PlayerAnswer,
+            NextQuestion = nextQuestion != null ? new QuestionDTO
+            {
+                QuestionId = nextQuestion.QuestionId,
+                Number = nextQuestion.Number
+            } : null,
+            GameEnded = !session.IsActive,
+        };
+    }
+    
+    
+    public async Task<GameSessionStatsDTO> GetSessionStatsAsync(Guid sessionId)
+    {
+        var session = await GetGameSessionById(sessionId);
+
+        // TODO: mapping
+        return new GameSessionStatsDTO
+        {
+            CorrectAnswerNum = session.CorrectAnswerNum,
+            IncorrectAnswerNum = session.IncorrectAnswerNum
+        };
+    }
     
     ///////// private methods
+    
+    private async Task<GameSession> GetGameSessionById(Guid sessionId)
+    {
+        // TODO: put this in repo
+        var session = await _context.GameSessions
+            .FirstOrDefaultAsync(s => s.SessionId == sessionId);
+
+        if (session == null)
+            throw new Exception("Session not found");
+        return session;
+    }
+
     
     private async Task<Question> GenerateQuestionAsync(GameSession session)
     {
         
-        // will put this in Question service & repo
+        // TODO: put this in Question service & repo
         // get list of used numbers in the game session
         var usedNumbers = await _context.Questions
             .Where(q => q.SessionId == session.SessionId)
@@ -95,7 +174,7 @@ public class GameSessionService
             .ToListAsync();
 
         // generate random number
-        int number = _random.Next(MIN_NUMBER, MAX_NUMBER + 1);
+        var number = _random.Next(MIN_NUMBER, MAX_NUMBER + 1);
 
         // Continue generating numbers until a unique one is found
         while (usedNumbers.Contains(number))
@@ -111,7 +190,7 @@ public class GameSessionService
             GeneratedAt = DateTime.UtcNow
         };
 
-        // will put this in repo
+        // TODO: put this in repo
         _context.Questions.Add(question);
         await _context.SaveChangesAsync();
 

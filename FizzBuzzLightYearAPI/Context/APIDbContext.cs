@@ -100,7 +100,6 @@ public class APIDbContext: DbContext
                 DurationSeconds = 60,
                 StartTime = DateTime.UtcNow,
                 EndTime = DateTime.UtcNow.AddSeconds(60),
-                Score = 0,
                 IsActive = false,
                 CorrectAnswerNum = 3,
                 IncorrectAnswerNum = 2

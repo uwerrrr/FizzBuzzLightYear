@@ -25,7 +25,6 @@ public class GameSession
     public bool IsActive { get; set; }
     public int CorrectAnswerNum { get; set; }
     public int IncorrectAnswerNum { get; set; }
-    public int Score { get; set; }
 
     // Navigation property
     public Game Game { get; set; }

@@ -24,7 +24,8 @@ builder.Services.AddScoped<GameRepository>();
 
 builder.Services.AddScoped<RuleService>();
 builder.Services.AddScoped<RuleRepository>();
-// builder.Services.AddScoped<GameSessionService>();
+
+builder.Services.AddScoped<GameSessionService>();
 // builder.Services.AddScoped<QuestionService>();
 
 var app = builder.Build();
