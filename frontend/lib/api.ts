@@ -12,13 +12,19 @@ export const api = {
   },
 
   async createGame(game: { name: string; author: string; rules: Rule[] }) {
+    console.log(JSON.stringify(game));
     const response = await fetch(`${API_URL}/Game`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(game),
     });
-    if (!response.ok) throw new Error("Failed to create game");
-    return response.json();
+    if (!response.ok && response.body) {
+      const errorMessage = await response.text();
+      console.error("Failed to create game:", errorMessage);
+      throw new Error("Failed to create game: " + errorMessage);
+    }
+    const data = await response.json();
+    return data;
   },
 
   async startGameSession(
