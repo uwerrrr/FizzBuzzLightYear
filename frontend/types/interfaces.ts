@@ -25,6 +25,7 @@ export interface GameSession {
   questions: Question[];
 }
 
+
 export interface Question {
   questionId: string;
   sessionId: string;
@@ -57,7 +58,7 @@ export interface NextQuestion {
   number: number;
 }
 
-export interface GameStats {
+export interface GameSessionStats {
   correctAnswerNum: number;
   incorrectAnswerNum: number;
 }

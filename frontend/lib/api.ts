@@ -18,7 +18,7 @@ export const api = {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(game),
     });
-    if (!response.ok && response.body) {
+    if (!response.ok) {
       const errorMessage = await response.text();
       console.error("Failed to create game:", errorMessage);
       throw new Error("Failed to create game: " + errorMessage);
@@ -37,7 +37,11 @@ export const api = {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ gameId, playerName, durationSeconds }),
     });
-    if (!response.ok) throw new Error("Failed to start game session");
+    if (!response.ok) {
+      const errorMessage = await response.text();
+      console.error("Failed to start game session:", errorMessage);
+      throw new Error("Failed to start game session: " + errorMessage);
+    }
     return response.json();
   },
 
@@ -51,13 +55,23 @@ export const api = {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ sessionId, questionId, playerAnswer }),
     });
-    if (!response.ok) throw new Error("Failed to submit answer");
+    if (!response.ok) {
+      const errorMessage = await response.text();
+      console.error("Failed to submit answer:", errorMessage);
+      throw new Error("Failed to submit answer: " + errorMessage);
+    }
+
     return response.json();
   },
 
   async getSessionStats(sessionId: string) {
     const response = await fetch(`${API_URL}/GameSession/${sessionId}/stats`);
-    if (!response.ok) throw new Error("Failed to fetch session stats");
+    if (!response.ok) {
+      const errorMessage = await response.text();
+      console.error("Failed to fetch session stats:", errorMessage);
+      throw new Error("Failed to fetch session stats: " + errorMessage);
+    }
+
     return response.json();
   },
 };

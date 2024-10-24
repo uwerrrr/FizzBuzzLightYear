@@ -82,6 +82,7 @@ export default function CreateGameForm() {
                 }}
                 className="w-1/3 p-2 border rounded"
                 placeholder="Divisible by"
+                min="1"
                 required
               />
               <input
