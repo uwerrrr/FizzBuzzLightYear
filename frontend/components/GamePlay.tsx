@@ -1,13 +1,13 @@
 "use client";
 
 import { useState, useEffect } from "react";
-// import { useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { GameSessionResponse, GameSessionStats } from "@/types/interfaces";
 import { api } from "@/lib/api";
 
 // TODO: break down to components
 export default function GamePlay({ gameId }: { gameId: string }) {
-  // const router = useRouter();
+  const router = useRouter();
   const [playerName, setPlayerName] = useState("");
   const [duration, setDuration] = useState(60);
   const [session, setSession] = useState<GameSessionResponse | null>(null);
@@ -80,6 +80,19 @@ export default function GamePlay({ gameId }: { gameId: string }) {
     }
   };
 
+  const BackToHomeBtn = () => {
+    return (
+      <div className="max-w-md mx-auto text-center">
+        <button
+          className="bg-slate-500 hover:bg-slate-700 text-white py-2 px-4 rounded mb-4"
+          onClick={() => router.push("/")}
+        >
+          Back to Home
+        </button>
+      </div>
+    );
+  };
+
   // if game is over, show stats
   if (stats) {
     return (
@@ -98,6 +111,7 @@ export default function GamePlay({ gameId }: { gameId: string }) {
           >
             Play Again
           </button>
+          <BackToHomeBtn />
         </div>
       </div>
     );
@@ -135,6 +149,7 @@ export default function GamePlay({ gameId }: { gameId: string }) {
         >
           Start Game
         </button>
+        <BackToHomeBtn />
       </form>
     );
   }
