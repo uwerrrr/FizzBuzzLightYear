@@ -23,7 +23,7 @@ FizzBuzzLightYear is an online gaming application that allows users to create, m
 - **API**: Complete.
 - **Frontend**:
   - **Game Creation**: Completed UI for viewing and creating new games with rules.
-  - **Game Play and Stats**: In progress.
+  - **Game Play and Stats**: Completed UI for gameplay and result.
 
 ## Requirements
 
@@ -64,7 +64,9 @@ FizzBuzzLightYear is an online gaming application that allows users to create, m
 
 ## Future Goals
 
-- Complete the game play and statistics tracking frontend.
+- Containerization
+- Break frontend down to more components
+- Display answer feedback when game finish
 - Add testing functions for backend and frontend
 
 ## Known Issues
