@@ -6,8 +6,12 @@ export const api = {
   async getAllGames() {
     console.log(`${API_URL}/Game`);
     const response = await fetch(`${API_URL}/Game`);
-    console.log(response);
-    if (!response.ok) throw new Error("Failed to fetch games");
+    console.log(response.text());
+    if (!response.ok) {
+      const errorMessage = await response.text();
+      console.error("Failed to fetch games:", errorMessage);
+      throw new Error("Failed to fetch games: " + errorMessage);
+    }
     return response.json();
   },
 
