@@ -44,6 +44,39 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
+// Database initialization
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    try
+    {
+        var context = services.GetRequiredService<APIDbContext>();
+        
+        // Ensure database is created and apply migrations
+        context.Database.EnsureCreated();
+        
+        if (context.Database.GetPendingMigrations().Any())
+        {
+            context.Database.Migrate();
+        }
+        
+        // Verify if seeding is needed
+        if (!context.Games.Any())
+        {
+            // The seeding is handled in OnModelCreating
+            context.SaveChanges();
+        }
+    }
+    catch (Exception ex)
+    {
+        var logger = services.GetRequiredService<ILogger<Program>>();
+        logger.LogError(ex, "An error occurred while initializing the database.");
+        throw;
+    }
+}
+
+
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

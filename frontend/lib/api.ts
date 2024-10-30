@@ -4,9 +4,8 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export const api = {
   async getAllGames() {
-    console.log(`${API_URL}/Game`);
+    console.log("API_URL:", process.env.NEXT_PUBLIC_API_URL);
     const response = await fetch(`${API_URL}/Game`);
-    console.log(response.text());
     if (!response.ok) {
       const errorMessage = await response.text();
       console.error("Failed to fetch games:", errorMessage);
