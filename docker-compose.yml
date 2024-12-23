@@ -1,39 +1,29 @@
-# version: '3.8'
-
+version: "3.9"
 services:
   backend:
     build:
       context: ./FizzBuzzLightYearAPI
-      dockerfile: Dockerfile
     ports:
-      - "5012:80"
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=http://+:80
+      - "8080:8080"
+      - "8081:8081"
     volumes:
       - ./db:/app/db
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
     networks:
       - app-network
-    # Ensure container has permission to write to the volume
-    user: "1000:1000" # This matches typical Linux user permissions
-    # Add healthcheck to ensure database is accessible
-    healthcheck:
-      test: ["CMD", "test", "-f", "/app/db/database.db"]
-      interval: 10s
-      timeout: 3s
-      retries: 3
 
   frontend:
     build:
       context: ./frontend
-      dockerfile: Dockerfile
-      args:
-        - NEXT_PUBLIC_API_URL=http://localhost:5012/api
     ports:
       - "3000:3000"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
     environment:
-      - NEXT_PUBLIC_API_URL=http://localhost:5012/api
-      - NODE_ENV=production
+      - NODE_ENV=development
+      - NEXT_PUBLIC_API_URL=http://localhost:8080/api
     depends_on:
       - backend
     networks:
@@ -42,3 +32,8 @@ services:
 networks:
   app-network:
     driver: bridge
+
+  # db:
+  #   image: nouchka/sqlite3
+  #   volumes:
+  #     - ./db:/data
