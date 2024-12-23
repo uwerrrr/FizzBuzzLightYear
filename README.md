@@ -36,22 +36,57 @@ FizzBuzzLightYear is an online gaming application that allows users to create, m
 
 ## Build Instructions
 
+### Option 1: Running with Docker Compose
+
 1. **Clone the repository**:
+
    ```bash
    git clone https://github.com/username/FizzBuzzLightYear.git
    ```
+
 2. **Navigate to project directory**:
+
    ```bash
    cd FizzBuzzLightYear
    ```
+
+3. **Build and run with Docker Compose**:
+
+   ```bash
+   docker compose up --build
+   ```
+
+4. **Access the application**:
+   - Frontend: http://localhost:3000
+   - Backend API: http://localhost:8080
+   - Swagger Documentation: http://localhost:8080/swagger
+
+### Option 2: Running Locally
+
+1. **Clone the repository**:
+
+   ```bash
+   git clone https://github.com/username/FizzBuzzLightYear.git
+   ```
+
+2. **Navigate to project directory**:
+
+   ```bash
+   cd FizzBuzzLightYear
+   ```
+
 3. **Install frontend dependencies**:
+
    ```bash
    npm install
    ```
+
 4. **Run API migrations**:
+
    ```bash
    dotnet ef database update
    ```
+
 5. **Run the application**:
    - **Backend**:
      ```bash
@@ -62,9 +97,20 @@ FizzBuzzLightYear is an online gaming application that allows users to create, m
      npm run dev
      ```
 
+## Project Structure
+
+```
+FizzBuzzLightYear/
+├── frontend/               # Next.js frontend application
+├── FizzBuzzLightYearAPI/  # ASP.NET backend API
+├── db/                    # SQLite database directory
+├── docker-compose.yml     # Docker Compose configuration
+└── README.md
+```
+
 ## Future Goals
 
-- Containerization
+- ~~Containerization~~ ✅
 - Break frontend down to more components
 - Display answer feedback when game finish
 - Add testing functions for backend and frontend
