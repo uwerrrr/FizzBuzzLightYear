@@ -11,6 +11,24 @@ FizzBuzzLightYear is an online gaming application that allows users to create, m
 - **Score Tracking**: At the end of each session, the player's score is displayed, showing correct and incorrect answers.
 - **Unique Game Names**: Each game is stored with a unique name and the author's details.
 
+## Screenshots
+
+- **Homepage**: Displays a list of all available games with their rules, allowing users to select one to play.</br>
+  <img src="screenshots/homepage.png" alt="Homepage" width="500"/>
+
+- **Create New Game**: A simple form for users to define the name, author, and rules for a new game.</br>
+  <img src="screenshots/create_new_game.png" alt="Create New Game Page" width="500"/>
+
+- **Start New Game**: Before starting, players can set their name and the duration of the game session.</br>
+  <img src="screenshots/start_new_game.png" alt="Start New Game Page" width="500"/>
+
+- **Gameplay Interface**: The main game screen, showing the countdown timer, rules, a random number, and the input field for the answer.</br>
+  <img src="screenshots/countdown.png" alt="Gameplay Countdown" width="500"/>
+
+- **Game Over Screen**: After the timer runs out, this screen displays the final score with correct and incorrect answer counts.</br>
+  <img src="screenshots/gameover.png" alt="Game Over Screen" width="500"/>
+
+
 ## Tech Stack
 
 - **Frontend**: Next.js with TypeScript for fast and modular single-page application development.
